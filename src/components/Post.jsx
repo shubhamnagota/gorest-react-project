@@ -17,7 +17,7 @@ const Post = () => {
   return (
     <>
       <div className="post">
-        <h1>Create a User</h1>
+        <h1>Create a Post</h1>
 
         <label>Title:</label>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
