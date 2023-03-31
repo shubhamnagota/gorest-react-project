@@ -4,14 +4,15 @@ import { useQuery } from "react-query";
 import Post from "./Post";
 
 import api from "../config/api";
+import PostDetails from "./PostDetails";
 
-async function getPosts() {
-  const { data } = await api.get("/posts");
-  return data;
-}
+const PostList = ({ userId }) => {
+  const { data, error, isError, isLoading, refetch: refetchPosts } = useQuery(`${userId}-posts`, getUserPosts);
 
-const PostList = () => {
-  const { data, error, isError, isLoading } = useQuery("posts", getPosts);
+  async function getUserPosts() {
+    const { data } = await api.get(`/users/${userId}/posts`);
+    return data;
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -22,14 +23,10 @@ const PostList = () => {
 
   return (
     <div className="container">
-      <h1>Posts</h1>
-      <Post />
+      <h3>Posts</h3>
+      <Post userId={userId} refetchPosts={refetchPosts} />
       {data.map((post) => {
-        return (
-          <li key={post.id}>
-            {post.user_id} | {post.title} | {post.body}
-          </li>
-        );
+        return <PostDetails key={post.id} postId={post.id} />;
       })}
     </div>
   );

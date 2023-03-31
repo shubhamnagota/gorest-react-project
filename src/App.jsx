@@ -1,17 +1,20 @@
 import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import UserList from "./components/UserList";
-import PostList from "./components/PostList";
-import CommentList from "./components/CommentList";
+import UserDetails from "./components/UserDetails";
+import PostDetails from "./components/PostDetails";
 
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <UserList />
-      <PostList />
-      <CommentList />
+      <Routes>
+        <Route path="/" element={<Navigate replace to="/users" />} />
+        <Route path="/users" element={<UserList />} />
+        <Route path="/users/:id" element={<UserDetails />} />
+      </Routes>
     </div>
   );
 }

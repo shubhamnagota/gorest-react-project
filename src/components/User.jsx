@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useMutation } from "react-query";
 
 import api from "../config/api";
+import { getErrorMessage } from "../utils";
 
 const User = () => {
   const [name, setName] = useState("");
@@ -9,7 +10,7 @@ const User = () => {
   const [gender, setGender] = useState("male");
   const [status, setStatus] = useState("active");
 
-  const { isLoading, isError, error, mutate, data } = useMutation(createUser, { retry: 3 });
+  const { isLoading, isError, error, mutate, data } = useMutation(createUser, { retry: 1 });
 
   async function createUser() {
     const { data } = await api.post("/users", { name, email, gender, status });
@@ -32,7 +33,7 @@ const User = () => {
         <p> Created a new User ID: {data && data.id}</p>
         <div style={{ color: "gray", background: "#234" }}>
           {isLoading ? "Saving..." : ""}
-          {isError ? error.message : ""}
+          {isError ? getErrorMessage(error) : ""}
         </div>
       </div>
     </>

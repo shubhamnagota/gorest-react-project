@@ -5,13 +5,13 @@ import Comment from "./Comment";
 
 import api from "../config/api";
 
-async function getComments() {
-  const { data } = await api.get("/comments");
-  return data;
-}
+const CommentList = ({ postId }) => {
+  const { data, error, isError, isLoading, refetch: refetchComments } = useQuery(`${postId}-comments`, getComments);
 
-const CommentList = () => {
-  const { data, error, isError, isLoading } = useQuery("comments", getComments);
+  async function getComments() {
+    const { data } = await api.get(`/posts/${postId}/comments`);
+    return data;
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -22,12 +22,12 @@ const CommentList = () => {
 
   return (
     <div className="container">
-      <h1>Comments</h1>
-      <Comment />
+      <h3>Comments</h3>
+      <Comment postId={postId} refetchComments={refetchComments} />
       {data.map((comment) => {
         return (
           <li key={comment.id}>
-            {comment.name} | {comment.post_id} | {comment.email} | {comment.body}
+            {comment.id} | {comment.name} | {comment.email} | {comment.body}
           </li>
         );
       })}

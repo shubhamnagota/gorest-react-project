@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import User from "./User";
+import Loading from "./Loading";
 
 import api from "../config/api";
 
@@ -12,9 +14,10 @@ async function getUsers() {
 
 const UserList = () => {
   const { data, error, isError, isLoading } = useQuery("users", getUsers);
+  const navigate = useNavigate();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   if (isError) {
     return <div>Error! {error.message}</div>;
@@ -24,13 +27,30 @@ const UserList = () => {
     <div className="container">
       <h1>Users</h1>
       <User />
-      {data.map((user) => {
-        return (
-          <li key={user.id}>
-            {user.name} | {user.email} | {user.gender} | {user.status}
-          </li>
-        );
-      })}
+      <table class="table table-striped table-hover">
+        <thead className="table-success">
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((user) => {
+            return (
+              <tr key={user.id} onClick={() => navigate(`/users/${user.id}`)}>
+                <th scope="row">{user.id}</th>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.gender}</td>
+                <td>{user.status}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
