@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 import api from "../config/api";
 import { getErrorMessage } from "../utils";
 
-const User = () => {
+const User = ({ refetchUsers }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("male");
@@ -14,6 +14,7 @@ const User = () => {
 
   async function createUser() {
     const { data } = await api.post("/users", { name, email, gender, status });
+    await refetchUsers();
     return data;
   }
 

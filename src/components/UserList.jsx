@@ -13,7 +13,7 @@ async function getUsers() {
 }
 
 const UserList = () => {
-  const { data, error, isError, isLoading } = useQuery("users", getUsers);
+  const { data, error, isError, isLoading, refetch: refetchUsers } = useQuery("users", getUsers);
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -26,7 +26,7 @@ const UserList = () => {
   return (
     <div className="container">
       <h1>Users</h1>
-      <User />
+      <User refetchUsers={refetchUsers} />
       <table class="table table-striped table-hover">
         <thead className="table-success">
           <tr>
